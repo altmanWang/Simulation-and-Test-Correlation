@@ -17,7 +17,10 @@ function onScroll() {
   scrolled.value = window.scrollY > 20
 }
 
-onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
@@ -33,10 +36,13 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   left: 0;
   right: 0;
   z-index: 100;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
   transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
 }
 .nav.scrolled {
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 3px rgba(0,0,0,0.04);
@@ -47,25 +53,17 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   gap: 10px;
   font-weight: 700;
   font-size: 17px;
-  color: white;
-  transition: color 0.25s;
-}
-.nav.scrolled .nav-brand {
   color: var(--text-primary);
+  transition: color 0.25s;
 }
 .icon {
   width: 28px;
   height: 28px;
-  background: rgba(255,255,255,0.2);
+  background: var(--brand);
   border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  transition: background 0.25s, color 0.25s;
-}
-.nav.scrolled .icon {
-  background: var(--brand);
   color: white;
 }
 </style>
