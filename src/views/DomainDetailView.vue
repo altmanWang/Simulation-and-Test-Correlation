@@ -105,8 +105,8 @@ const tableTitle = computed(() => {
 }
 .tree-table-wrapper {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 16px;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
 }
 .empty {
   text-align: center;

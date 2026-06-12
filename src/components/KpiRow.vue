@@ -7,7 +7,7 @@
 <style scoped>
 .kpi-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 3fr 1fr 1fr;
   gap: 16px;
 }
 @media (max-width: 1024px) {

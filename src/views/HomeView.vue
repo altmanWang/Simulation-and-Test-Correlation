@@ -310,13 +310,13 @@ function goToDomain(id) {
   border: 1px solid var(--border);
   border-left: 4px solid transparent;
   border-radius: 12px;
-  padding: 16px 24px;
+  padding: 14px 24px;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   opacity: 0;
   transform: translateY(20px);
   animation: card-enter 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -348,7 +348,7 @@ function goToDomain(id) {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
-  width: 200px;
+  width: 220px;
   padding-top: 0;
   margin-bottom: 0;
 }
@@ -428,7 +428,7 @@ function goToDomain(id) {
 
 .dc-levels {
   display: flex;
-  gap: 24px;
+  gap: 16px;
   flex: 1;
   justify-content: space-around;
   padding-top: 0;
