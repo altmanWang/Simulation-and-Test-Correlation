@@ -96,7 +96,7 @@ const tableTitle = computed(() => {
 
 <style scoped>
 .main {
-  max-width: 1280px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 24px 32px;
   display: flex;
