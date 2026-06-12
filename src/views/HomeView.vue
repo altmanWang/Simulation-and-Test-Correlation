@@ -191,11 +191,10 @@ const alertDescription = computed(() => {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
 }
 .hero-content {
   position: relative;
