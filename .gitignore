@@ -25,4 +25,6 @@ dist-ssr
 
 .vscode
 .claude
+.superpowers
+.worktrees
 node_modules
