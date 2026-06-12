@@ -354,7 +354,7 @@ const alertDescription = computed(() => {
 .blt { border-left-color: #2563EB; }
 .highspeed { border-left-color: #7C3AED; }
 .thermal { border-left-color: #059669; }
-.power { border-left-color: #F59E0B; }
+.power { border-left-color: #B45309; }
 .pi { border-left-color: #EC4899; }
 .domain-card.warning {
   border-left-color: #F59E0B;
