@@ -47,7 +47,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   gap: 10px;
   font-weight: 700;
   font-size: 17px;
-  color: white;
+  color: var(--text-primary);
   transition: color 0.25s;
 }
 .nav.scrolled .nav-brand {
@@ -56,12 +56,12 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 .icon {
   width: 28px;
   height: 28px;
-  background: rgba(255,255,255,0.2);
+  background: var(--brand-light);
   border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--brand);
   transition: background 0.25s, color 0.25s;
 }
 .nav.scrolled .icon {
