@@ -184,7 +184,7 @@ const alertDescription = computed(() => {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 40%, #7C3AED 100%);
+  background: linear-gradient(135deg, #EFF4FB 0%, #F0F4FF 50%, #F8FAFC 100%);
   clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
 }
 .hero-grid {
@@ -201,7 +201,7 @@ const alertDescription = computed(() => {
   position: relative;
   z-index: 1;
   text-align: center;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 36px;
 }
 .hero-eyebrow {
@@ -235,7 +235,7 @@ const alertDescription = computed(() => {
 }
 .hero-desc {
   font-size: 15px;
-  opacity: 0.7;
+  opacity: 0.6;
   max-width: 480px;
   margin: 0 auto;
 }
@@ -246,31 +246,33 @@ const alertDescription = computed(() => {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 16px;
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 .hero-kpi {
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 20px 24px;
   text-align: center;
-  color: white;
+  color: var(--text-primary);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: transform 0.2s, background 0.2s;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .hero-kpi:hover {
   transform: scale(1.03);
-  background: rgba(255,255,255,0.16);
+  box-shadow: var(--shadow-md);
+  border-color: #CBD5E1;
 }
 .hero-kpi.primary {
-  background: rgba(255,255,255,0.18);
-  border-color: rgba(255,255,255,0.25);
+  background: linear-gradient(135deg, #2563EB, #1d4ed8);
+  border: none;
+  color: white;
   flex-direction: column;
   gap: 4px;
   padding: 20px 28px;
@@ -301,8 +303,8 @@ const alertDescription = computed(() => {
   font-variant-numeric: tabular-nums;
 }
 .hero-kpi-num small { font-size: 16px; opacity: 0.6; }
-.hero-kpi-num.danger { color: #FCA5A5; }
-.hero-kpi-num.success { color: #6EE7B7; }
+.hero-kpi-num.danger { color: var(--danger); }
+.hero-kpi-num.success { color: var(--success); }
 
 /* ======= CONTENT ======= */
 .content {
