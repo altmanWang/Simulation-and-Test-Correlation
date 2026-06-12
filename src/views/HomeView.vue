@@ -50,8 +50,6 @@
           :style="{ animationDelay: (0.08 * i) + 's' }"
           @click="goToDomain(d.id)"
         >
-          <div class="dc-accent"></div>
-          <div class="dc-highlight"></div>
           <div class="dc-top">
             <div class="dc-icon-box" :class="'dc-icon-' + d.id">
               <component :is="iconMap[d.id]" :size="20" :stroke-width="2" />
@@ -307,7 +305,7 @@ const alertDescription = computed(() => {
 
 /* ======= CONTENT ======= */
 .content {
-  max-width: 1280px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 32px 32px 40px;
   display: flex;
@@ -331,19 +329,21 @@ const alertDescription = computed(() => {
 /* ======= DOMAIN CARDS ======= */
 .domain-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 .domain-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 22px 24px 18px;
+  border-left: 4px solid transparent;
+  border-radius: 12px;
+  padding: 16px 24px;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 24px;
   opacity: 0;
   transform: translateY(20px);
   animation: card-enter 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -351,52 +351,33 @@ const alertDescription = computed(() => {
 @keyframes card-enter {
   to { opacity: 1; transform: translateY(0); }
 }
-.blt { background: linear-gradient(180deg, #F8FAFE 0%, #FFFFFF 55%); }
-.highspeed { background: linear-gradient(180deg, #F9F7FF 0%, #FFFFFF 55%); }
-.thermal { background: linear-gradient(180deg, #F6FDF9 0%, #FFFFFF 55%); }
-.power { background: linear-gradient(180deg, #FFFCF5 0%, #FFFFFF 55%); }
-.pi { background: linear-gradient(180deg, #FDF7FA 0%, #FFFFFF 55%); }
+.blt { border-left-color: #2563EB; }
+.highspeed { border-left-color: #7C3AED; }
+.thermal { border-left-color: #059669; }
+.power { border-left-color: #F59E0B; }
+.pi { border-left-color: #EC4899; }
 .domain-card.warning {
+  border-left-color: #F59E0B;
   border-color: #FDE68A;
-  background: linear-gradient(180deg, #FFFDF5 0%, #FFFDF5 55%);
+  background: #FFFDF5;
 }
 .domain-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow:
-    0 16px 32px rgba(0,0,0,0.07),
-    0 4px 8px rgba(0,0,0,0.04);
+    0 8px 24px rgba(0,0,0,0.06),
+    0 2px 6px rgba(0,0,0,0.04);
   border-color: #CBD5E1;
 }
-.domain-card:active { transform: translateY(-1px) scale(0.995); }
-.domain-card:hover .dc-accent {
-  box-shadow: 0 0 16px currentColor;
-}
-.dc-accent {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  border-radius: 16px 16px 0 0;
-  transition: box-shadow 0.3s;
-}
-.dc-highlight {
-  position: absolute;
-  top: 4px; left: 1px; right: 1px;
-  height: 1px;
-  background: rgba(255,255,255,0.6);
-  border-radius: 0;
-}
-.blt .dc-accent { background: linear-gradient(90deg, #2563EB, #60A5FA); color: #2563EB; }
-.highspeed .dc-accent { background: linear-gradient(90deg, #7C3AED, #A78BFA); color: #7C3AED; }
-.thermal .dc-accent { background: linear-gradient(90deg, #059669, #34D399); color: #059669; }
-.power .dc-accent { background: linear-gradient(90deg, #F59E0B, #FBBF24); color: #F59E0B; }
-.pi .dc-accent { background: linear-gradient(90deg, #EC4899, #F472B6); color: #EC4899; }
+.domain-card:active { transform: translateY(0) scale(0.998); }
 
 .dc-top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  margin-bottom: 14px;
-  padding-top: 6px;
+  flex-shrink: 0;
+  width: 200px;
+  padding-top: 0;
+  margin-bottom: 0;
 }
 .dc-icon-box {
   width: 40px;
@@ -431,34 +412,39 @@ const alertDescription = computed(() => {
 
 .dc-consistency {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 38px;
+  font-size: 32px;
   font-weight: 700;
-  margin-bottom: 16px;
-  letter-spacing: -2px;
+  flex-shrink: 0;
+  width: 80px;
+  text-align: right;
+  margin-bottom: 0;
+  letter-spacing: -1px;
 }
 .dc-consistency small {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   opacity: 0.5;
-  margin-left: 2px;
+  margin-left: 1px;
 }
 
 .dc-metrics {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 16px;
+  display: flex;
+  gap: 16px;
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 .dc-metric {
-  background: #F8FAFC;
-  border-radius: 8px;
-  padding: 8px 10px;
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .dc-metric-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
-  display: block;
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
 .dc-metric-val {
   font-family: 'JetBrains Mono', monospace;
@@ -469,14 +455,16 @@ const alertDescription = computed(() => {
 
 .dc-levels {
   display: flex;
-  gap: 4px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
+  gap: 12px;
+  flex: 1;
+  justify-content: flex-end;
+  padding-top: 0;
+  border-top: none;
 }
 .dc-lv {
-  flex: 1;
+  flex: 0 0 auto;
   text-align: center;
-  padding: 4px 2px;
+  padding: 2px 6px;
 }
 .dc-lv-dot {
   display: block;
@@ -564,7 +552,24 @@ const alertDescription = computed(() => {
   .hero-title { font-size: 30px; }
   .hero-kpis { grid-template-columns: 1fr 1fr; }
   .hero-kpi.primary { grid-column: 1/-1; }
-  .domain-grid { grid-template-columns: 1fr 1fr; }
+  .domain-card {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .dc-top { width: 100%; }
+  .dc-levels {
+    width: 100%;
+    justify-content: flex-start;
+  }
   .content { padding: 24px 20px 32px; }
+}
+
+@media (max-width: 640px) {
+  .domain-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dc-consistency { text-align: left; width: auto; }
+  .dc-levels { flex-wrap: wrap; }
 }
 </style>
