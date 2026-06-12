@@ -2,13 +2,14 @@
   <div class="breadcrumb">
     <router-link to="/" class="link">首页</router-link>
     <span class="sep">›</span>
-    <span class="current">{{ name }}</span>
+    <span class="current" :style="{ color: color }">{{ name }}</span>
   </div>
 </template>
 
 <script setup>
 defineProps({
-  name: String
+  name: String,
+  color: String
 })
 </script>
 
@@ -32,7 +33,6 @@ defineProps({
   color: var(--text-muted);
 }
 .current {
-  color: var(--text-primary);
   font-weight: 500;
 }
 </style>

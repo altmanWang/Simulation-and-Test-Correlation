@@ -1,16 +1,42 @@
 <template>
   <div class="main">
-    <BreadcrumbNav :name="detail?.name || ''" />
-
-    <KpiRow v-if="detail">
-      <KpiCard
-        :label="detail.name + '一致性'"
-        :value="detail.consistency.toFixed(1) + '%'"
-        :primary="true"
-      />
-      <KpiCard label="测试项" :value="detail.totalItems" />
-      <KpiCard label="偏差项" :value="detail.deviationItems" value-color="var(--danger)" />
-    </KpiRow>
+    <!-- Domain Header -->
+    <div v-if="detail" class="domain-header" :class="'dh-' + detail.id">
+      <div class="dh-accent"></div>
+      <BreadcrumbNav :name="detail.name" :color="domainColor" />
+      <div class="dh-body">
+        <div class="dh-info">
+          <div class="dh-icon-box">
+            <component :is="domainIcon" :size="22" :stroke-width="2" />
+          </div>
+          <div>
+            <h1 class="dh-title">{{ detail.name }}</h1>
+            <div class="dh-meta">
+              {{ detail.totalItems }} 个测试项 · {{ detail.deviationItems }} 个偏差项
+              <span class="dh-badge" :class="detail.consistency >= 93 ? 'pass' : 'alert'">
+                {{ detail.consistency >= 93 ? '达标' : '⚠ 关注' }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="dh-kpis">
+          <div class="dh-kpi primary">
+            <div class="dh-kpi-val" :style="{ color: domainColor }">
+              {{ detail.consistency.toFixed(1) }}<small>%</small>
+            </div>
+            <div class="dh-kpi-label">仿测一致性</div>
+          </div>
+          <div class="dh-kpi">
+            <div class="dh-kpi-val">{{ detail.totalItems }}</div>
+            <div class="dh-kpi-label">测试项</div>
+          </div>
+          <div class="dh-kpi">
+            <div class="dh-kpi-val danger">{{ detail.deviationItems }}</div>
+            <div class="dh-kpi-label">偏差项</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div v-if="detail" class="tree-table-wrapper">
       <HierarchyTree
@@ -33,9 +59,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { Layers, Zap, Thermometer, BatteryFull, Activity } from 'lucide-vue-next'
 import { useDashboardStore } from '../stores/dashboard'
-import KpiRow from '../components/KpiRow.vue'
-import KpiCard from '../components/KpiCard.vue'
 import BreadcrumbNav from '../components/BreadcrumbNav.vue'
 import HierarchyTree from '../components/HierarchyTree.vue'
 import TestResultTable from '../components/TestResultTable.vue'
@@ -47,7 +72,12 @@ const props = defineProps({
 const store = useDashboardStore()
 const detail = computed(() => store.getDomainDetail(props.id))
 
-// Default to first component-level node
+const iconMap = { blt: Layers, highspeed: Zap, thermal: Thermometer, power: BatteryFull, pi: Activity }
+const colorMap = { blt: '#2563EB', highspeed: '#7C3AED', thermal: '#059669', power: '#B45309', pi: '#EC4899' }
+
+const domainIcon = computed(() => iconMap[props.id] || Layers)
+const domainColor = computed(() => colorMap[props.id] || '#2563EB')
+
 const defaultNodeId = computed(() => {
   if (!detail.value) return ''
   for (const node of detail.value.tree) {
@@ -103,6 +133,117 @@ const tableTitle = computed(() => {
   flex-direction: column;
   gap: 24px;
 }
+
+/* ======= DOMAIN HEADER ======= */
+.domain-header {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 20px 28px 24px;
+}
+.dh-accent {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+}
+.dh-blt { background: linear-gradient(135deg, #F8FAFE 0%, #FFFFFF 60%); }
+.dh-highspeed { background: linear-gradient(135deg, #F9F7FF 0%, #FFFFFF 60%); }
+.dh-thermal { background: linear-gradient(135deg, #F6FDF9 0%, #FFFFFF 60%); }
+.dh-power { background: linear-gradient(135deg, #FFFCF5 0%, #FFFFFF 60%); }
+.dh-pi { background: linear-gradient(135deg, #FDF7FA 0%, #FFFFFF 60%); }
+.dh-blt .dh-accent { background: #2563EB; }
+.dh-highspeed .dh-accent { background: #7C3AED; }
+.dh-thermal .dh-accent { background: #059669; }
+.dh-power .dh-accent { background: #B45309; }
+.dh-pi .dh-accent { background: #EC4899; }
+
+.dh-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.dh-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dh-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dh-blt .dh-icon-box { background: #EFF6FF; color: #2563EB; }
+.dh-highspeed .dh-icon-box { background: #F5F3FF; color: #7C3AED; }
+.dh-thermal .dh-icon-box { background: #ECFDF5; color: #059669; }
+.dh-power .dh-icon-box { background: #FFFBEB; color: #D97706; }
+.dh-pi .dh-icon-box { background: #FDF2F8; color: #EC4899; }
+
+.dh-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.dh-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dh-badge {
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 100px;
+  font-weight: 500;
+}
+.dh-badge.pass { background: #ECFDF5; color: #059669; }
+.dh-badge.alert { background: #FFFBEB; color: #B45309; }
+
+.dh-kpis {
+  display: flex;
+  gap: 0;
+  flex-shrink: 0;
+}
+.dh-kpi {
+  text-align: center;
+  padding: 12px 28px;
+  border-left: 1px solid var(--border);
+}
+.dh-kpi:first-child {
+  border-left: none;
+}
+.dh-kpi.primary {
+  min-width: 140px;
+}
+.dh-kpi-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.dh-kpi-val small {
+  font-size: 18px;
+  font-weight: 500;
+  opacity: 0.5;
+  margin-left: 2px;
+}
+.dh-kpi-val.danger { color: var(--danger); }
+.dh-kpi-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
 .tree-table-wrapper {
   display: grid;
   grid-template-columns: 260px 1fr;
@@ -114,7 +255,21 @@ const tableTitle = computed(() => {
   color: var(--text-muted);
   font-size: 16px;
 }
+
 @media (max-width: 1024px) {
+  .dh-body {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .dh-kpis {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .dh-kpi {
+    flex: 1;
+    padding: 12px 16px;
+  }
   .tree-table-wrapper {
     grid-template-columns: 1fr;
   }
