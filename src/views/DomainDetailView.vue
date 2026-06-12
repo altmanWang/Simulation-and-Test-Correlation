@@ -98,7 +98,7 @@ const tableTitle = computed(() => {
 .main {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 24px 32px;
+  padding: 76px 32px 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
