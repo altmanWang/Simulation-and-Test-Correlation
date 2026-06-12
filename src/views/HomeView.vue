@@ -99,31 +99,14 @@
         </div>
       </div>
 
-      <Transition name="alert">
-        <div v-if="store.alertDomains.length > 0" class="alert-bar">
-          <div class="alert-left">
-            <div class="alert-icon-box">
-              <TriangleAlert :size="20" :stroke-width="2" />
-            </div>
-            <div class="alert-body">
-              <div class="alert-title">{{ alertTitle }}</div>
-              <div class="alert-desc">{{ alertDescription }}</div>
-            </div>
-          </div>
-          <button class="alert-btn" @click="goToDomain(store.alertDomains[0].id)">
-            查看详情
-            <ArrowRight :size="14" :stroke-width="2" />
-          </button>
-        </div>
-      </Transition>
     </section>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Layers, Zap, Thermometer, BatteryFull, Activity, TriangleAlert, ArrowRight } from 'lucide-vue-next'
+import { Layers, Zap, Thermometer, BatteryFull, Activity } from 'lucide-vue-next'
 import { useDashboardStore } from '../stores/dashboard'
 
 const store = useDashboardStore()
@@ -158,16 +141,6 @@ function goToDomain(id) {
   router.push({ name: 'domain', params: { id } })
 }
 
-const alertTitle = computed(() => {
-  const names = store.alertDomains.map(d => d.name).join('、')
-  return `${names}一致性低于阈值（93%）`
-})
-
-const alertDescription = computed(() => {
-  const d = store.alertDomains[0]
-  if (!d) return ''
-  return `当前 ${d.consistency.toFixed(1)}%，共 ${d.deviationItems} 个偏差项待处理`
-})
 </script>
 
 <style scoped>
@@ -455,97 +428,34 @@ const alertDescription = computed(() => {
 
 .dc-levels {
   display: flex;
-  gap: 12px;
+  gap: 24px;
   flex: 1;
-  justify-content: flex-end;
+  justify-content: space-around;
   padding-top: 0;
   border-top: none;
 }
 .dc-lv {
-  flex: 0 0 auto;
-  text-align: center;
-  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
 }
 .dc-lv-dot {
-  display: block;
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  margin: 0 auto 4px;
   opacity: 0.6;
+  flex-shrink: 0;
 }
 .dc-lv-label {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text-muted);
-  display: block;
-  margin-bottom: 2px;
 }
 .dc-lv-val {
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
   font-weight: 700;
 }
-
-/* ======= ALERT ======= */
-.alert-bar {
-  background: var(--warning-light);
-  border: 1px solid #FDE68A;
-  border-radius: 14px;
-  padding: 16px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-.alert-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.alert-icon-box {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #FEF3C7;
-  color: #D97706;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.alert-body { flex: 1; }
-.alert-title {
-  font-weight: 600;
-  font-size: 14px;
-  color: #92400E;
-}
-.alert-desc {
-  font-size: 13px;
-  color: #B45309;
-  margin-top: 2px;
-}
-.alert-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  background: var(--warning);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  font-family: inherit;
-  white-space: nowrap;
-  transition: background 0.15s;
-}
-.alert-btn:hover { background: #D97706; }
-
-.alert-enter-active { transition: all 0.4s ease; }
-.alert-leave-active { transition: all 0.3s ease; }
-.alert-enter-from,
-.alert-leave-to { opacity: 0; transform: translateY(-8px); }
 
 @media (max-width: 1024px) {
   .hero { padding: 40px 20px 32px; }
