@@ -3,7 +3,7 @@
     <!-- Domain Header -->
     <div v-if="detail" class="domain-header" :class="'dh-' + detail.id">
       <div class="dh-accent"></div>
-      <BreadcrumbNav :name="detail.name" :color="domainColor" />
+      <BreadcrumbNav :name="detail.name" dark />
       <div class="dh-body">
         <div class="dh-info">
           <div class="dh-icon-box">
@@ -21,7 +21,7 @@
         </div>
         <div class="dh-kpis">
           <div class="dh-kpi primary">
-            <div class="dh-kpi-val" :style="{ color: domainColor }">
+            <div class="dh-kpi-val">
               {{ detail.consistency.toFixed(1) }}<small>%</small>
             </div>
             <div class="dh-kpi-label">仿测一致性</div>
@@ -137,27 +137,26 @@ const tableTitle = computed(() => {
 /* ======= DOMAIN HEADER ======= */
 .domain-header {
   position: relative;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 45%, #7C3AED 100%);
+  border: none;
+  border-radius: 16px;
   overflow: hidden;
-  padding: 20px 28px 24px;
+  padding: 28px 32px 32px;
+  color: white;
+}
+.domain-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
 }
 .dh-accent {
-  position: absolute;
-  top: 0; left: 0; bottom: 0;
-  width: 4px;
+  display: none;
 }
-.dh-blt { background: linear-gradient(135deg, #F8FAFE 0%, #FFFFFF 60%); }
-.dh-highspeed { background: linear-gradient(135deg, #F9F7FF 0%, #FFFFFF 60%); }
-.dh-thermal { background: linear-gradient(135deg, #F6FDF9 0%, #FFFFFF 60%); }
-.dh-power { background: linear-gradient(135deg, #FFFCF5 0%, #FFFFFF 60%); }
-.dh-pi { background: linear-gradient(135deg, #FDF7FA 0%, #FFFFFF 60%); }
-.dh-blt .dh-accent { background: #2563EB; }
-.dh-highspeed .dh-accent { background: #7C3AED; }
-.dh-thermal .dh-accent { background: #059669; }
-.dh-power .dh-accent { background: #B45309; }
-.dh-pi .dh-accent { background: #EC4899; }
 
 .dh-body {
   display: flex;
@@ -178,12 +177,9 @@ const tableTitle = computed(() => {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: rgba(255,255,255,0.18);
+  color: white;
 }
-.dh-blt .dh-icon-box { background: #EFF6FF; color: #2563EB; }
-.dh-highspeed .dh-icon-box { background: #F5F3FF; color: #7C3AED; }
-.dh-thermal .dh-icon-box { background: #ECFDF5; color: #059669; }
-.dh-power .dh-icon-box { background: #FFFBEB; color: #D97706; }
-.dh-pi .dh-icon-box { background: #FDF2F8; color: #EC4899; }
 
 .dh-title {
   font-size: 24px;
@@ -193,7 +189,7 @@ const tableTitle = computed(() => {
 }
 .dh-meta {
   font-size: 13px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.7);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -204,31 +200,35 @@ const tableTitle = computed(() => {
   border-radius: 100px;
   font-weight: 500;
 }
-.dh-badge.pass { background: #ECFDF5; color: #059669; }
-.dh-badge.alert { background: #FFFBEB; color: #B45309; }
+.dh-badge.pass { background: rgba(52,211,153,0.25); color: #6EE7B7; }
+.dh-badge.alert { background: rgba(252,165,165,0.25); color: #FCA5A5; }
 
 .dh-kpis {
   display: flex;
   gap: 0;
   flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  overflow: hidden;
 }
 .dh-kpi {
   text-align: center;
-  padding: 12px 28px;
-  border-left: 1px solid var(--border);
+  padding: 14px 28px;
+  border-left: 1px solid rgba(255,255,255,0.12);
 }
 .dh-kpi:first-child {
   border-left: none;
 }
 .dh-kpi.primary {
-  min-width: 140px;
+  min-width: 150px;
 }
 .dh-kpi-val {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 700;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
+  color: white;
 }
 .dh-kpi-val small {
   font-size: 18px;
@@ -236,10 +236,10 @@ const tableTitle = computed(() => {
   opacity: 0.5;
   margin-left: 2px;
 }
-.dh-kpi-val.danger { color: var(--danger); }
+.dh-kpi-val.danger { color: #FCA5A5; }
 .dh-kpi-label {
   font-size: 12px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.65);
   margin-top: 4px;
   font-weight: 500;
 }

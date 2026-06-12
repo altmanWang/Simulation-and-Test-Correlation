@@ -1,15 +1,15 @@
 <template>
-  <div class="breadcrumb">
+  <div class="breadcrumb" :class="{ dark }">
     <router-link to="/" class="link">首页</router-link>
     <span class="sep">›</span>
-    <span class="current" :style="{ color: color }">{{ name }}</span>
+    <span class="current">{{ name }}</span>
   </div>
 </template>
 
 <script setup>
 defineProps({
   name: String,
-  color: String
+  dark: Boolean
 })
 </script>
 
@@ -34,5 +34,19 @@ defineProps({
 }
 .current {
   font-weight: 500;
+  color: var(--text-primary);
+}
+
+.breadcrumb.dark .link {
+  color: rgba(255,255,255,0.7);
+}
+.breadcrumb.dark .link:hover {
+  color: white;
+}
+.breadcrumb.dark .sep {
+  color: rgba(255,255,255,0.4);
+}
+.breadcrumb.dark .current {
+  color: white;
 }
 </style>
