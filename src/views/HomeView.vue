@@ -158,13 +158,19 @@ function goToDomain(id) {
 </script>
 
 <style scoped>
-.home { overflow: hidden; }
+.home {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 52px);
+  overflow: hidden;
+}
 
 /* ======= HERO ======= */
 .hero {
   position: relative;
-  padding: 80px 32px 40px;
+  padding: 56px 32px 32px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 .hero-bg {
   position: absolute;
@@ -293,11 +299,13 @@ function goToDomain(id) {
 /* ======= CONTENT ======= */
 .content {
   max-width: 1600px;
+  width: 100%;
   margin: 0 auto;
   padding: 32px 32px 48px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex: 1;
 }
 .section-header {
   display: flex;
@@ -335,7 +343,8 @@ function goToDomain(id) {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 14px;
-  align-items: start;
+  align-items: stretch;
+  flex: 1;
 }
 
 /* ======= KANBAN CARD ======= */
@@ -354,6 +363,7 @@ function goToDomain(id) {
   animation: card-enter 0.4s ease forwards;
   position: relative;
   overflow: hidden;
+  height: 100%;
 }
 .kanban-card::before {
   content: '';
@@ -481,6 +491,8 @@ function goToDomain(id) {
   gap: 4px;
   border-top: 1px solid #F3F4F6;
   padding-top: 10px;
+  flex: 1;
+  justify-content: space-evenly;
 }
 .kc-lv {
   display: grid;
