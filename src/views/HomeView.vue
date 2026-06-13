@@ -4,6 +4,9 @@
     <section class="hero">
       <div class="hero-bg"></div>
       <div class="hero-grid"></div>
+      <div class="hero-flow">
+        <div class="flow-line" v-for="n in 5" :key="n" :style="flowStyle(n)"></div>
+      </div>
       <div class="hero-content">
         <div class="hero-eyebrow">
           <div class="hero-dot"></div>
@@ -39,10 +42,6 @@
           <Layers :size="20" :stroke-width="2" class="section-icon" />
           各领域一致性
         </h2>
-        <div class="section-summary">
-          <span class="ss-dot pass"></span>{{ store.overview.qualifiedDomains }} 达标
-          <span class="ss-dot alert"></span>{{ store.overview.totalDomains - store.overview.qualifiedDomains }} 关注
-        </div>
       </div>
 
       <div class="kanban-row">
@@ -61,9 +60,6 @@
             </div>
             <div class="kc-info">
               <div class="kc-name">{{ d.name }}</div>
-            </div>
-            <div class="kc-badge" :class="d.consistency >= d.threshold ? 'pass' : 'alert'">
-              {{ d.consistency >= d.threshold ? '达标' : '关注' }}
             </div>
           </div>
 
@@ -132,6 +128,19 @@ function goToDomain(id) {
   router.push({ name: 'domain', params: { id } })
 }
 
+function flowStyle(n) {
+  const top = 15 + (n - 1) * 18
+  const duration = 8 + n * 3
+  const delay = -(n * 1.5)
+  const width = 180 + n * 60
+  return {
+    top: top + '%',
+    width: width + 'px',
+    animationDuration: duration + 's',
+    animationDelay: delay + 's',
+  }
+}
+
 </script>
 
 <style scoped>
@@ -155,18 +164,45 @@ function goToDomain(id) {
 .hero-bg {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 40%, #7C3AED 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
 }
 .hero-grid {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background-image:
     linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
   background-size: 40px 40px;
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
   mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
+}
+
+/* Data flow lines */
+.hero-flow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.flow-line {
+  position: absolute;
+  left: -300px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.08) 70%, transparent);
+  animation: flow-drift linear infinite;
+  pointer-events: none;
+}
+.flow-line:nth-child(2) { height: 1px; opacity: 0.7; }
+.flow-line:nth-child(4) { height: 1px; opacity: 0.6; }
+
+@keyframes flow-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 480px)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-line { animation: none; }
 }
 .hero-content {
   position: relative;
@@ -302,22 +338,6 @@ function goToDomain(id) {
 }
 .section-icon { color: var(--brand); }
 
-.section-summary {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-.ss-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: -10px;
-}
-.ss-dot.pass { background: #10B981; }
-.ss-dot.alert { background: #F59E0B; }
-
 /* ======= KANBAN ROW ======= */
 .kanban-row {
   display: grid;
@@ -401,16 +421,6 @@ function goToDomain(id) {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.kc-badge {
-  font-size: 11px;
-  padding: 2px 10px;
-  border-radius: 100px;
-  font-weight: 500;
-  flex-shrink: 0;
-}
-.kc-badge.pass { background: #ECFDF5; color: #059669; }
-.kc-badge.alert { background: #FEF3C7; color: #B45309; }
-
 /* Hero number */
 .kc-hero {
   display: flex;
