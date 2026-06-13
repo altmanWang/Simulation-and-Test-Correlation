@@ -32,66 +32,76 @@
       </div>
     </section>
 
-    <!-- Domain Cards -->
+    <!-- Kanban Cards -->
     <section class="content">
       <div class="section-header">
         <h2 class="section-title">
           <Layers :size="20" :stroke-width="2" class="section-icon" />
           各领域一致性
         </h2>
+        <div class="section-summary">
+          <span class="ss-dot pass"></span>{{ store.overview.qualifiedDomains }} 达标
+          <span class="ss-dot alert"></span>{{ store.overview.totalDomains - store.overview.qualifiedDomains }} 关注
+        </div>
       </div>
 
-      <div class="domain-list">
+      <div class="kanban-row">
         <div
           v-for="(d, i) in store.domains"
           :key="d.id"
-          class="domain-card"
+          class="kanban-card"
           :class="[d.id, { warning: d.consistency < d.threshold }]"
-          :style="{ animationDelay: (0.08 * i) + 's' }"
+          :style="{ animationDelay: (0.06 * i) + 's' }"
           @click="goToDomain(d.id)"
         >
-          <!-- Card header: icon + name + badge + overall stats -->
-          <div class="dc-header">
-            <div class="dc-icon-box" :class="'dc-icon-' + d.id">
-              <component :is="iconMap[d.id]" :size="28" :stroke-width="2" />
+          <!-- Header: icon + name + badge -->
+          <div class="kc-header">
+            <div class="kc-icon-box" :class="'kc-icon-' + d.id">
+              <component :is="iconMap[d.id]" :size="20" :stroke-width="2" />
             </div>
-            <div class="dc-info">
-              <div class="dc-name">{{ d.name }}</div>
-              <div class="dc-badge" :class="d.consistency >= d.threshold ? 'pass' : 'alert'">
-                {{ d.consistency >= d.threshold ? '达标' : '⚠ 关注' }}
-              </div>
+            <div class="kc-info">
+              <div class="kc-name">{{ d.name }}</div>
             </div>
-            <div class="dc-overall">
-              <div class="dc-overall-consistency" :style="{ color: colorMap[d.id] }">
-                {{ d.consistency.toFixed(1) }}<small>%</small>
-              </div>
-              <div class="dc-overall-meta">
-                <span>{{ d.totalItems }} 项</span>
-                <span class="sep">·</span>
-                <span class="dc-overall-dev">{{ d.deviationItems }} 偏差</span>
-              </div>
+            <div class="kc-badge" :class="d.consistency >= d.threshold ? 'pass' : 'alert'">
+              {{ d.consistency >= d.threshold ? '达标' : '关注' }}
             </div>
           </div>
 
-          <!-- Card body: per-level consistency table -->
-          <div class="dc-body">
-            <div class="dc-table">
-              <div class="dc-table-row dc-table-head">
-                <span class="dc-tcol-label"></span>
-                <span class="dc-tcol-val">一致性</span>
-                <span class="dc-tcol-items">测试项</span>
-                <span class="dc-tcol-dev">偏差</span>
-              </div>
-              <div
-                v-for="lv in levels"
-                :key="lv.key"
-                class="dc-table-row"
-              >
-                <span class="dc-tcol-label">{{ lv.label }}</span>
-                <span class="dc-tcol-val" :style="{ color: colorMap[d.id] }">{{ d.levelConsistency[lv.key].toFixed(1) }}%</span>
-                <span class="dc-tcol-items">{{ d.levelItems[lv.key] }}</span>
-                <span class="dc-tcol-dev">{{ d.levelDeviations[lv.key] }}</span>
-              </div>
+          <!-- Hero number: consistency + trend -->
+          <div class="kc-hero">
+            <span class="kc-consistency" :style="{ color: colorMap[d.id] }">
+              {{ d.consistency.toFixed(1) }}<small>%</small>
+            </span>
+            <span class="kc-trend" :class="d.trend >= 0 ? 'up' : 'down'">
+              {{ d.trend >= 0 ? '↑' : '↓' }} {{ Math.abs(d.trend).toFixed(1) }}%
+            </span>
+          </div>
+
+          <!-- Meta -->
+          <div class="kc-meta">
+            <span class="kc-meta-item">{{ d.totalItems }} 测试项</span>
+            <span class="kc-meta-sep">·</span>
+            <span class="kc-meta-item" :class="{ dev: d.deviationItems > 0 }">{{ d.deviationItems }} 偏差</span>
+          </div>
+
+          <!-- Mini progress bar -->
+          <div class="kc-bar-track">
+            <div
+              class="kc-bar-fill"
+              :style="{ width: d.consistency + '%', background: colorMap[d.id] }"
+            ></div>
+          </div>
+
+          <!-- Per-level list -->
+          <div class="kc-levels">
+            <div
+              v-for="lv in levels"
+              :key="lv.key"
+              class="kc-lv"
+            >
+              <span class="kc-lv-label">{{ lv.label }}</span>
+              <span class="kc-lv-val" :style="{ color: colorMap[d.id] }">{{ d.levelConsistency[lv.key].toFixed(1) }}%</span>
+              <span class="kc-lv-meta">{{ d.levelItems[lv.key] }}项</span>
             </div>
           </div>
         </div>
@@ -282,12 +292,12 @@ function goToDomain(id) {
 
 /* ======= CONTENT ======= */
 .content {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 32px 32px 40px;
+  padding: 32px 32px 48px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 .section-header {
   display: flex;
@@ -295,182 +305,224 @@ function goToDomain(id) {
   justify-content: space-between;
 }
 .section-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
+  color: #1F2937;
 }
 .section-icon { color: var(--brand); }
 
-/* ======= DOMAIN CARDS ======= */
-.domain-list {
+.section-summary {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--text-muted);
 }
-.domain-card {
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(226,232,240,0.6);
-  border-left: 5px solid transparent;
-  border-radius: 14px;
-  padding: 24px 28px;
-  box-shadow: var(--shadow-sm);
+.ss-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: -10px;
+}
+.ss-dot.pass { background: #10B981; }
+.ss-dot.alert { background: #F59E0B; }
+
+/* ======= KANBAN ROW ======= */
+.kanban-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+/* ======= KANBAN CARD ======= */
+.kanban-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E6EB;
+  border-radius: 12px;
+  padding: 18px 16px 16px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
   opacity: 0;
-  transform: translateY(20px);
-  animation: card-enter 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform: translateY(16px);
+  animation: card-enter 0.4s ease forwards;
+  position: relative;
+  overflow: hidden;
 }
+.kanban-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.blt::before { background: #2563EB; }
+.highspeed::before { background: #7C3AED; }
+.thermal::before { background: #059669; }
+.power::before { background: #B45309; }
+.pi::before { background: #EC4899; }
+.kanban-card.warning::before { background: #F59E0B; }
+.kanban-card.warning {
+  border-color: #FDE68A;
+  background: #FFFDF5;
+}
+
 @keyframes card-enter {
   to { opacity: 1; transform: translateY(0); }
 }
-.blt { border-left-color: #2563EB; }
-.highspeed { border-left-color: #7C3AED; }
-.thermal { border-left-color: #059669; }
-.power { border-left-color: #B45309; }
-.pi { border-left-color: #EC4899; }
-.domain-card.warning {
-  border-left-color: #F59E0B;
-  border-color: rgba(253,230,138,0.5);
-  background: rgba(255,253,245,0.65);
+
+.kanban-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  border-color: #CBD5E1;
+  transform: translateY(-2px);
 }
-.domain-card:hover {
-  transform: translateY(-3px);
-  background: rgba(255,255,255,0.78);
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.07),
-    0 3px 8px rgba(0,0,0,0.05);
-  border-color: rgba(203,213,225,0.8);
-}
-.domain-card:active { transform: translateY(0) scale(0.998); }
 
 /* Card header */
-.dc-header {
+.kc-header {
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  align-items: center;
+  gap: 10px;
 }
-.dc-header .dc-info {
-  flex: 1;
-  min-width: 0;
-}
-.dc-header .dc-icon-box {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+.kc-icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
-.dc-icon-blt { background: #EFF6FF; color: #2563EB; }
-.dc-icon-highspeed { background: #F5F3FF; color: #7C3AED; }
-.dc-icon-thermal { background: #ECFDF5; color: #059669; }
-.dc-icon-power { background: #FFFBEB; color: #D97706; }
-.dc-icon-pi { background: #FDF2F8; color: #EC4899; }
+.kc-icon-blt { background: #EFF6FF; color: #2563EB; }
+.kc-icon-highspeed { background: #F5F3FF; color: #7C3AED; }
+.kc-icon-thermal { background: #ECFDF5; color: #059669; }
+.kc-icon-power { background: #FFFBEB; color: #D97706; }
+.kc-icon-pi { background: #FDF2F8; color: #EC4899; }
 
-.dc-header .dc-name {
+.kc-info { flex: 1; min-width: 0; }
+.kc-name {
   font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 4px;
+  font-size: 15px;
+  color: #1F2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.dc-header .dc-badge {
-  display: inline-block;
-  font-size: 12px;
-  padding: 3px 12px;
+.kc-badge {
+  font-size: 11px;
+  padding: 2px 10px;
   border-radius: 100px;
   font-weight: 500;
-}
-.dc-badge.pass { background: #ECFDF5; color: #059669; }
-.dc-badge.alert { background: #FFFBEB; color: #B45309; }
-
-/* Overall stats in header */
-.dc-header .dc-overall {
-  text-align: right;
   flex-shrink: 0;
 }
-.dc-header .dc-overall-consistency {
+.kc-badge.pass { background: #ECFDF5; color: #059669; }
+.kc-badge.alert { background: #FEF3C7; color: #B45309; }
+
+/* Hero number */
+.kc-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.kc-consistency {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -1.5px;
 }
-.dc-header .dc-overall-consistency small {
-  font-size: 20px;
+.kc-consistency small {
+  font-size: 18px;
   font-weight: 500;
-  opacity: 0.4;
-  margin-left: 2px;
+  opacity: 0.35;
+  margin-left: 1px;
 }
-.dc-header .dc-overall-meta {
+.kc-trend {
   font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 3px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+.kc-trend.up { color: #059669; }
+.kc-trend.down { color: #DC2626; }
+
+/* Meta */
+.kc-meta {
   display: flex;
   align-items: center;
   gap: 6px;
-  justify-content: flex-end;
+  font-size: 13px;
+  color: #9CA3AF;
 }
-.dc-header .dc-overall-meta .sep { opacity: 0.4; }
-.dc-header .dc-overall-dev { color: var(--danger); }
+.kc-meta-item.dev { color: #B45309; font-weight: 500; }
+.kc-meta-sep { opacity: 0.4; }
 
-/* Card body: per-level table */
-.dc-body {
+/* Progress bar */
+.kc-bar-track {
+  height: 4px;
+  background: #F3F4F6;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.kc-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  min-width: 0;
+  transition: width 0.8s ease;
+}
+
+/* Per-level list */
+.kc-levels {
   display: flex;
   flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid #F3F4F6;
+  padding-top: 10px;
 }
-.dc-table {
-  display: flex;
-  flex-direction: column;
-}
-.dc-table-row {
+.kc-lv {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(203,213,225,0.3);
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 13px;
 }
-.dc-table-row:last-child { border-bottom: none; }
-.dc-table-head {
-  padding: 6px 0 8px;
-  border-bottom: 1px solid rgba(203,213,225,0.5);
-}
-.dc-table-head .dc-tcol-label,
-.dc-table-head .dc-tcol-val,
-.dc-table-head .dc-tcol-items,
-.dc-table-head .dc-tcol-dev {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-transform: none;
-}
-.dc-tcol-label {
-  font-size: 15px;
+.kc-lv-label {
+  color: #9CA3AF;
   font-weight: 500;
 }
-.dc-tcol-val {
+.kc-lv-val {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 20px;
   font-weight: 700;
-  text-align: center;
+  font-size: 14px;
+  text-align: right;
+  min-width: 52px;
 }
-.dc-tcol-items {
+.kc-lv-meta {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 16px;
-  text-align: center;
-  color: var(--text-muted);
+  font-size: 12px;
+  color: #D1D5DB;
+  text-align: right;
+  min-width: 28px;
 }
-.dc-tcol-dev {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 16px;
-  text-align: center;
-  color: var(--text-muted);
+
+@media (max-width: 1400px) {
+  .kanban-row {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .kanban-card { padding: 14px 12px 12px; }
+  .kc-consistency { font-size: 30px; }
+  .kc-consistency small { font-size: 15px; }
+}
+
+@media (max-width: 1100px) {
+  .kanban-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -478,34 +530,18 @@ function goToDomain(id) {
   .hero-title { font-size: 30px; }
   .hero-kpis { grid-template-columns: 1fr 1fr; }
   .hero-kpi.primary { grid-column: 1/-1; }
-  .dc-header {
-    flex-wrap: wrap;
+  .kanban-row {
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
-  .dc-header .dc-overall {
-    width: 100%;
-    display: flex;
-    align-items: baseline;
-    gap: 16px;
-  }
-  .dc-header .dc-overall-meta { margin-top: 0; }
-  .domain-card {
-    padding: 18px 20px;
-    gap: 14px;
-    min-height: 0;
-  }
-  .dc-header .dc-icon-box { width: 40px; height: 40px; border-radius: 10px; }
-  .dc-header .dc-overall-consistency { font-size: 28px; }
-  .dc-header .dc-overall-consistency small { font-size: 16px; }
-  .dc-table-row {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-  }
-  .dc-tcol-val { font-size: 16px; }
-  .dc-tcol-label { font-size: 14px; }
-  .dc-tcol-items,
-  .dc-tcol-dev {
-    font-size: 14px;
-  }
+  .kanban-card { padding: 14px 12px 12px; gap: 10px; }
+  .kc-consistency { font-size: 28px; }
   .content { padding: 24px 20px 32px; }
+}
+
+@media (max-width: 480px) {
+  .kanban-row {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
