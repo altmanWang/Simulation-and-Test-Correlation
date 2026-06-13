@@ -14,15 +14,15 @@
       </div>
       <div class="hero-kpis">
         <div class="hero-kpi primary">
-          <div class="hero-kpi-val">{{ animatedConsistency }}<small>%</small></div>
+          <div class="hero-kpi-val">{{ store.overview.totalConsistency }}<small>%</small></div>
           <div class="hero-kpi-label">总体仿测一致性</div>
         </div>
         <div class="hero-kpi">
-          <div class="hero-kpi-num">{{ animatedTotal }}</div>
+          <div class="hero-kpi-num">{{ store.overview.totalItems }}</div>
           <div class="hero-kpi-label">测试项总数</div>
         </div>
         <div class="hero-kpi">
-          <div class="hero-kpi-num danger">{{ animatedDeviation }}</div>
+          <div class="hero-kpi-num danger">{{ store.overview.deviationItems }}</div>
           <div class="hero-kpi-label">偏差项</div>
         </div>
         <div class="hero-kpi">
@@ -112,7 +112,6 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Layers, Zap, Thermometer, BatteryFull, Activity } from 'lucide-vue-next'
 import { useDashboardStore } from '../stores/dashboard'
@@ -129,28 +128,6 @@ const levels = [
   { key: 'material', label: '材料级' },
 ]
 
-const animatedConsistency = ref(0)
-const animatedTotal = ref(0)
-const animatedDeviation = ref(0)
-
-function animateValue(ref, target, duration = 1200) {
-  const start = performance.now()
-  function tick(now) {
-    const elapsed = now - start
-    const progress = Math.min(elapsed / duration, 1)
-    const eased = 1 - Math.pow(1 - progress, 3)
-    ref.value = Math.round(target * eased * 10) / 10
-    if (progress < 1) requestAnimationFrame(tick)
-  }
-  requestAnimationFrame(tick)
-}
-
-onMounted(() => {
-  animateValue(animatedConsistency, store.overview.totalConsistency)
-  animateValue(animatedTotal, store.overview.totalItems)
-  animateValue(animatedDeviation, store.overview.deviationItems)
-})
-
 function goToDomain(id) {
   router.push({ name: 'domain', params: { id } })
 }
@@ -161,7 +138,7 @@ function goToDomain(id) {
 .home {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 52px);
+  height: calc(100vh - 52px);
   overflow: hidden;
 }
 
@@ -541,7 +518,8 @@ function goToDomain(id) {
 }
 
 @media (max-width: 768px) {
-  .hero { padding: 40px 20px 32px; }
+  .home { height: auto; min-height: calc(100vh - 52px); }
+  .hero { flex: 0 0 auto; padding: 40px 20px 32px; }
   .hero-title { font-size: 30px; }
   .hero-kpis { grid-template-columns: 1fr 1fr; }
   .hero-kpi.primary { grid-column: 1/-1; }
@@ -551,7 +529,7 @@ function goToDomain(id) {
   }
   .kanban-card { padding: 14px 12px 12px; gap: 10px; }
   .kc-consistency { font-size: 28px; }
-  .content { padding: 24px 20px 32px; }
+  .content { flex: 0 0 auto; padding: 24px 20px 32px; }
 }
 
 @media (max-width: 480px) {
