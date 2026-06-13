@@ -170,7 +170,10 @@ function goToDomain(id) {
   position: relative;
   padding: 56px 32px 32px;
   overflow: hidden;
-  flex-shrink: 0;
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .hero-bg {
   position: absolute;
@@ -305,7 +308,7 @@ function goToDomain(id) {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  flex: 1;
+  flex: 0 0 50%;
 }
 .section-header {
   display: flex;
