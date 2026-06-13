@@ -323,8 +323,8 @@ function goToDomain(id) {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 14px;
-  align-items: stretch;
-  flex: 1;
+  align-items: center;
+  align-content: center;
 }
 
 /* ======= KANBAN CARD ======= */
@@ -343,7 +343,6 @@ function goToDomain(id) {
   animation: card-enter 0.4s ease forwards;
   position: relative;
   overflow: hidden;
-  height: 100%;
 }
 .kanban-card::before {
   content: '';
@@ -396,7 +395,7 @@ function goToDomain(id) {
 .kc-info { flex: 1; min-width: 0; }
 .kc-name {
   font-weight: 600;
-  font-size: 15px;
+  font-size: clamp(14px, 1.3vw, 17px);
   color: #1F2937;
   white-space: nowrap;
   overflow: hidden;
@@ -420,13 +419,13 @@ function goToDomain(id) {
 }
 .kc-consistency {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 36px;
+  font-size: clamp(28px, 3.5vw, 48px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -1.5px;
 }
 .kc-consistency small {
-  font-size: 18px;
+  font-size: clamp(14px, 1.6vw, 22px);
   font-weight: 500;
   opacity: 0.35;
   margin-left: 1px;
@@ -468,11 +467,9 @@ function goToDomain(id) {
 .kc-levels {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   border-top: 1px solid #F3F4F6;
   padding-top: 10px;
-  flex: 1;
-  justify-content: space-evenly;
 }
 .kc-lv {
   display: grid;
@@ -480,7 +477,7 @@ function goToDomain(id) {
   align-items: center;
   gap: 8px;
   padding: 3px 0;
-  font-size: 13px;
+  font-size: clamp(12px, 1vw, 14px);
 }
 .kc-lv-label {
   color: #9CA3AF;
@@ -489,7 +486,7 @@ function goToDomain(id) {
 .kc-lv-val {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
-  font-size: 14px;
+  font-size: clamp(13px, 1.1vw, 16px);
   text-align: right;
   min-width: 52px;
 }
@@ -507,8 +504,6 @@ function goToDomain(id) {
     gap: 10px;
   }
   .kanban-card { padding: 14px 12px 12px; }
-  .kc-consistency { font-size: 30px; }
-  .kc-consistency small { font-size: 15px; }
 }
 
 @media (max-width: 1100px) {
@@ -528,7 +523,6 @@ function goToDomain(id) {
     gap: 10px;
   }
   .kanban-card { padding: 14px 12px 12px; gap: 10px; }
-  .kc-consistency { font-size: 28px; }
   .content { flex: 0 0 auto; padding: 24px 20px 32px; }
 }
 
