@@ -16,7 +16,9 @@ export const domainSummaries = [
     deviationItems: 2,
     trend: 0.8,
     threshold: 93,
-    levelConsistency: { system: 98.7, module: 98.5, component: 98.9, material: 99.1 }
+    levelConsistency: { system: 98.7, module: 98.5, component: 98.9, material: 99.1 },
+    levelItems: { system: 8, module: 36, component: 120, material: 108 },
+    levelDeviations: { system: 0, module: 1, component: 1, material: 0 }
   },
   {
     id: 'highspeed',
@@ -26,7 +28,9 @@ export const domainSummaries = [
     deviationItems: 4,
     trend: 1.2,
     threshold: 93,
-    levelConsistency: { system: 94.2, module: 93.8, component: 94.5, material: 95.0 }
+    levelConsistency: { system: 94.2, module: 93.8, component: 94.5, material: 95.0 },
+    levelItems: { system: 12, module: 43, component: 160, material: 120 },
+    levelDeviations: { system: 0, module: 1, component: 2, material: 1 }
   },
   {
     id: 'thermal',
@@ -36,7 +40,9 @@ export const domainSummaries = [
     deviationItems: 1,
     trend: 0.5,
     threshold: 93,
-    levelConsistency: { system: 96.8, module: 97.2, component: 96.5, material: 96.0 }
+    levelConsistency: { system: 96.8, module: 97.2, component: 96.5, material: 96.0 },
+    levelItems: { system: 5, module: 29, component: 60, material: 45 },
+    levelDeviations: { system: 0, module: 0, component: 1, material: 0 }
   },
   {
     id: 'power',
@@ -46,7 +52,9 @@ export const domainSummaries = [
     deviationItems: 4,
     trend: -1.8,
     threshold: 93,
-    levelConsistency: { system: 91.5, module: 92.0, component: 90.8, material: 89.5 }
+    levelConsistency: { system: 91.5, module: 92.0, component: 90.8, material: 89.5 },
+    levelItems: { system: 9, module: 34, component: 100, material: 75 },
+    levelDeviations: { system: 0, module: 1, component: 2, material: 1 }
   },
   {
     id: 'pi',
@@ -56,7 +64,9 @@ export const domainSummaries = [
     deviationItems: 1,
     trend: 0.3,
     threshold: 93,
-    levelConsistency: { system: 97.3, module: 97.5, component: 97.1, material: 96.8 }
+    levelConsistency: { system: 97.3, module: 97.5, component: 97.1, material: 96.8 },
+    levelItems: { system: 6, module: 28, component: 50, material: 38 },
+    levelDeviations: { system: 0, module: 0, component: 1, material: 0 }
   }
 ]
 
